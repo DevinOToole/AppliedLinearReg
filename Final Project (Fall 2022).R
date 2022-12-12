@@ -83,7 +83,6 @@ sellout_model <- glm(Sellout ~ Stadium.Capacity.1000s + Wins +
 summary(sellout_model)
 
 pred_sellout_model = predict(sellout_model, type="response")
-pred_sellout_model
 
 # Finding optimal threshold for sellout model
 class_errors = c()
@@ -92,14 +91,17 @@ for(i in seq_along(thresholds)){
   actual_pred_sellout_model = pred_sellout_model >= threshold
   mod_perf = table(actual_pred_sellout_model, nfl_data_w_sellout$Sellout)
   
-  # sum up diagonal values b/w predicted class vs true class, and calculate error
   class_error = 1 - sum(diag(mod_perf)) / sum(mod_perf)
   class_errors[i] = class_error
 }
 
+# Visual of classification errors and thresholds                                      
 plot(thresholds, class_errors)
 
+# Thresholds with lowest classification error
 thresholds[which(class_errors == min(class_errors))]
+
+# Lowest classification error                                      
 class_errors[which(class_errors == min(class_errors))]
 
 # McFadden R squared for sellout model
